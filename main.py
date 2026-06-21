@@ -513,11 +513,11 @@ elif st.session_state.game_started and st.session_state.week <= 18:
                     msg_list.append(f"💯 【考試結束】你的表現評分為：{score}。")
 
                 # 隨機抽取事件 (70% 機率)
-                if not st.session_state.flag_67_locked and random.random() < 0.70:
+                if not st.session_state.flag_67_locked and random.random() < 0.90:
                     if st.session_state.flag_67_friend and random.random() < 0.02:
                         st.session_state.pending_choice = 18
                     else:
-                        if random.random() < 0.5 and len(st.session_state.event_pool) > 0:
+                        if random.random() < 0.7 and len(st.session_state.event_pool) > 0:
                             idx = random.randint(0, len(st.session_state.event_pool) - 1)
                             picked = st.session_state.event_pool.pop(idx)
                             # 確保事件 15 只在 16-18 週發生
