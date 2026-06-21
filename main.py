@@ -595,10 +595,17 @@ elif st.session_state.game_started and st.session_state.week <= 18:
                                 st.session_state.player["社交"] -= 3
                                 msg_list.append("🔔 遇到火車站前愛心筆推銷。(存款-5, 社交-3)")
 
-                # 防止數值小於 0 (67狀態不受限)
+                # 每週自然消耗與數值上下限鎖定 (67狀態不受限)
                 if not st.session_state.flag_67_locked:
+                    # 執行每週基礎消耗
+                    st.session_state.player["存款"] -= 5
+                    st.session_state.player["學業"] -= 2
+                    st.session_state.player["體力"] -= 3
+                    msg_list.append("📉 【日常消耗】維持生活與記憶流失：存款-5, 學業-2, 體力-3")
+
+                    # 鎖定數值範圍在 0 到 100 之間
                     for k in st.session_state.player:
-                        st.session_state.player[k] = max(0, int(st.session_state.player[k]))
+                        st.session_state.player[k] = min(100, max(0, int(st.session_state.player[k])))
                 else:
                     st.session_state.player = {"學業": 67, "體力": 67, "存款": 67, "社交": 67}
 
