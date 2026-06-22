@@ -216,7 +216,7 @@ elif st.session_state.game_started and st.session_state.week <= 18:
                 st.rerun()
 
         elif c_id == 7:
-            st.write("**【系上期末聚餐】**群組揪團吃南紡高檔燒肉，預算有點緊...")
+            st.write("**【系上聚餐】**群組揪團吃南紡高檔燒肉，預算有點緊...")
             colA, colB = st.columns(2)
             if colA.button("咬牙跟去吃 (存款-20, 社交+15, 體力+5)"):
                 st.session_state.player["存款"] -= 20
