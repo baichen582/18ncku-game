@@ -647,9 +647,9 @@ elif st.session_state.game_started and st.session_state.week > 18:
     achievements = []
     # 翹課系列
     if c["skips"] == 0: achievements.append("🏅【全勤好寶寶】")
-    if c["skips"] > 10: achievements.append("🏅【我有自己的節奏】")
-    if c["skips"] > 20: achievements.append("🏅【教授：查無此人】")
-    if c["skips"] > 50: achievements.append("🏅【要不這個學咱就不上了】")
+    elif c["skips"] > 10: achievements.append("🏅【我有自己的節奏】")
+    elif c["skips"] > 20: achievements.append("🏅【教授：查無此人】")
+    elif c["skips"] > 50: achievements.append("🏅【要不這個學咱就不上了】")
 
     # 時間系列
     if p_rd > 0.75:
@@ -687,11 +687,11 @@ elif st.session_state.game_started and st.session_state.week > 18:
 
     if st.session_state.flag_67_locked:
         st.success("【67676767】你參透了宇宙的真理，這學期圓滿了。")
-    elif f_aca >= 150 and f_hp < 20:
+    elif f_aca >= 80 and f_hp < 30:
         st.success("【爆肝學霸】拿到了書卷獎，但身體快扛不住啦！")
-    elif f_soc >= 150:
+    elif f_soc >= 80:
         st.success("【公關達人】走到育樂街都有認識的攤販老闆，台南簡直是你的主場！")
-    elif f_wlt >= 150:
+    elif f_wlt >= 80:
         st.success("【學生富豪】打工賺得比正職還多，學分什麼的就當作交朋友吧！")
     elif f_aca < 30:
         st.error("【延畢大師】這學期的學分岌岌可危，準備多留一年吃丹丹漢堡了...")
