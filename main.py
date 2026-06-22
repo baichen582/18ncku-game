@@ -646,10 +646,14 @@ elif st.session_state.game_started and st.session_state.week > 18:
 
     achievements = []
     # 翹課系列
-    if c["skips"] == 0: achievements.append("🏅【全勤好寶寶】")
-    elif c["skips"] > 10: achievements.append("🏅【我有自己的節奏】")
-    elif c["skips"] > 20: achievements.append("🏅【教授：查無此人】")
-    elif c["skips"] > 50: achievements.append("🏅【要不這個學咱就不上了】")
+    if c["skips"] == 0:
+        achievements.append("🏅【全勤好寶寶】")
+    elif c["skips"] > 50:
+        achievements.append("🏅【要不這個學咱就不上了】")
+    elif c["skips"] > 20:
+        achievements.append("🏅【教授：查無此人】")
+    elif c["skips"] > 10:
+        achievements.append("🏅【我有自己的節奏】")
 
     # 時間系列
     if p_rd > 0.75:
