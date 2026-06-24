@@ -524,7 +524,7 @@ elif st.session_state.game_started and st.session_state.week <= 18:
                     msg_list.append(f"💯 【考試結束】你的表現評分為：{score}。")
 
                 # 隨機抽取事件 (90% 機率)
-                if not st.session_state.flag_67_locked and random.random() < 0.90:
+                if not st.session_state.flag_67_locked and random.random() < 1.0:
                     if st.session_state.flag_67_friend and random.random() < 0.067:
                         st.session_state.pending_choice = 18
                     else:
