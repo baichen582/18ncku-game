@@ -36,7 +36,7 @@ if 'counters' not in st.session_state:
         "skips": 0, "exam_scores": []
     }
 
-st.title("成功大學人生模擬器")
+st.title("成功大學18週模擬器")
 
 # ==========================================
 # 2. 第 0 週：開局設定畫面
@@ -115,7 +115,7 @@ elif st.session_state.game_started and st.session_state.week <= 18:
         st.subheader("⚠️ 突發事件！請做出選擇")
 
         if c_id == 1:
-            st.write("**【通識課遇到雷包組員】**期中報告大家都在裝死...")
+            st.write("**【通識課遇到雷包組員】**大家都在裝死...")
             colA, colB = st.columns(2)
             if colA.button("自己全包 (學業+5, 體力-5, 社交-5)"):
                 st.session_state.player["學業"] += 5
@@ -183,7 +183,7 @@ elif st.session_state.game_started and st.session_state.week <= 18:
 
         elif c_id == 5:
             st.write("**【在榕園撿到錢包】**地上有裝滿鈔票的錢包...")
-            colA, colB = st.columns(2)
+            colA, colB ,colC= st.columns(3)
             if colA.button("送交生輔組 (學業+3, 體力-2)"):
                 st.session_state.player["學業"] += 3
                 st.session_state.player["體力"] -= 2
@@ -194,6 +194,17 @@ elif st.session_state.game_started and st.session_state.week <= 18:
                 st.session_state.event_message = "快步離開現場。"
                 st.session_state.pending_choice = None
                 st.rerun()
+            if colC.button("偷偷藏起來 (隨機結果)"):
+               if random.random() < 0.35:
+                   st.session_state.player["體力"] -= 5
+                   st.session_state.player["社交"] -= 10
+                   st.session_state.player["存款"] -= 10
+                   st.session_state.event_message = "被監視器拍到當成小偷！跑警局超累還賠錢，名聲也臭了。"
+               else:
+                   st.session_state.player["存款"] += 15
+                   st.session_state.event_message = "沒被發現，發了一筆橫財，但你的道德在譴責你。"
+               st.session_state.pending_choice = None
+               st.rerun()
 
         elif c_id == 6:
             st.write("**【選課系統當機】**明天加退選死線，系統網頁狂轉圈圈...")
@@ -482,18 +493,18 @@ elif st.session_state.game_started and st.session_state.week <= 18:
 
                 # 負面狀態檢定
                 if not st.session_state.flag_67_locked:
-                    if st.session_state.player["體力"] < 15:
+                    if st.session_state.player["體力"] < 10:
                         penalty_ap = int((50 - st.session_state.credits) * 0.3)
                         st.session_state.ap = max(0, (50 - st.session_state.credits) - penalty_ap)
                         msg_list.append(f"💀 【免疫力崩潰】體力過低，下週減少 {penalty_ap} 點 AP。")
                     else:
                         st.session_state.ap = 50 - st.session_state.credits
 
-                    if st.session_state.player["存款"] < 15:
+                    if st.session_state.player["存款"] < 10:
                         st.session_state.player["體力"] -= 3
                         msg_list.append("💀 【月底吃土】存款過低只能吃泡麵，體力下降。")
 
-                    if st.session_state.player["社交"] < 15:
+                    if st.session_state.player["社交"] < 10:
                         st.session_state.player["學業"] -= 3
                         msg_list.append("💀 【邊緣人危機】錯過情報，學業下降。")
                 else:
@@ -512,9 +523,9 @@ elif st.session_state.game_started and st.session_state.week <= 18:
                     st.session_state.counters["exam_scores"].append(score)
                     msg_list.append(f"💯 【考試結束】你的表現評分為：{score}。")
 
-                # 隨機抽取事件 (70% 機率)
+                # 隨機抽取事件 (90% 機率)
                 if not st.session_state.flag_67_locked and random.random() < 0.90:
-                    if st.session_state.flag_67_friend and random.random() < 0.02:
+                    if st.session_state.flag_67_friend and random.random() < 0.067:
                         st.session_state.pending_choice = 18
                     else:
                         if random.random() < 0.7 and len(st.session_state.event_pool) > 0:
@@ -523,13 +534,13 @@ elif st.session_state.game_started and st.session_state.week <= 18:
                             # 確保事件 15 只在 16-18 週發生
                             if picked == 15 and st.session_state.week < 16:
                                 st.session_state.event_pool.append(15)
-                                rand_ev = random.randint(1, 15)
+                                st.session_state.pending_choice = None
+                            elif picked == 6 and st.session_state.week > 2:
+                                st.session_state.pending_choice = None
                                 # 備用隨機事件處理
-                                if rand_ev == 1:
-                                    st.session_state.player["存款"] += 6
-                                    msg_list.append("🔔 發票中獎獲得 600 元！")
                             else:
                                 st.session_state.pending_choice = picked
+
                         elif st.session_state.pending_choice is None:
                             rand_ev = random.randint(1, 15)
                             if rand_ev == 1:
@@ -618,7 +629,7 @@ elif st.session_state.game_started and st.session_state.week <= 18:
 # 4. 結局結算畫面
 # ==========================================
 elif st.session_state.game_started and st.session_state.week > 18:
-    st.header("🎓 遊戲結束！成大生活結算")
+    st.header("🎓 遊戲結束！這學期結算結算")
 
     f_aca = st.session_state.player["學業"]
     f_hp = st.session_state.player["體力"]
@@ -683,8 +694,27 @@ elif st.session_state.game_started and st.session_state.week > 18:
 
     if achievements:
         st.subheader("🏆 獲得成就")
+        achievement_desc = {
+            "🏅【全勤好寶寶】": "這學期完全沒有翹過任何一堂課，教授對你印象深刻！",
+            "🏅【我有自己的節奏】": "累積翹課超過 10 次，你掌握了選擇性聽課的精髓。",
+            "🏅【教授：查無此人】": "累積翹課超過 20 次，同學都以為你這學期已經休學了。",
+            "🏅【要不這個學咱就不上了】": "累積翹課超過 50 次，繳給學校的學費直接放水流。",
+            "🏅【卷王就是你】": "投入超過 75% 的時間在讀書，總圖書館根本是你家。",
+            "🏅【認真讀書好寶寶】": "超過一半的時間都在學習，基礎打得很扎實。",
+            "🏅【打工魔人】": "超過 75% 的時間都在打工，老闆差點把你升為正職。",
+            "🏅【校園打工仔】": "花了一半以上的時間賺錢，提早體驗社會大學的辛勞。",
+            "🏅【活動長好！】": "超過 75% 的時間都在玩社團與活動，系學會沒你不行。",
+            "🏅【活動狂人】": "超過一半的時間投入社交圈，走到哪裡都有認識的人。",
+            "🏅【成大卡比獸】": "超過一半的時間都在睡覺休息，徹底貫徹養生之道。",
+            "🏅【時間管理大師】": "讀書、打工、社團的時間分配極度平均，完美平衡大學金三角！",
+            "🏅【學神降臨】": "期中與期末考都超過 95 分，考試對你來說太簡單了。",
+            "🏅【生死一瞬間】": "兩次考試平均剛好 60 分，多一分浪費，少一分受罪。",
+            "🏅【這題超出了我的認知】": "兩次考試平均不到 30 分，這門課我們明年再見。"
+        }
         for ach in achievements:
-            st.write(ach)
+            with st.expander(ach):
+                # 透過字典找出對應的說明，如果沒找到就顯示預設文字
+                st.write(achievement_desc.get(ach, "達成了一項神秘成就！"))
 
     st.divider()
     st.subheader("🌟 你的專屬結局")
